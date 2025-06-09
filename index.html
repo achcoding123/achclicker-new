@@ -1,152 +1,38 @@
-<!DOCTYPE html>
-<html lang="ru">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AchClicker</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: #fff;
-        }
-        #character {
-            width: 100px;
-            height: 100px;
-            background-image: url('https://lh3.googleusercontent.com/pw/AP1GczMGJdjh4kTEAC67AaNSLOGmKIkpzsi5QuQjdKeWj1f5M9CTxWErmFn6OtwHBpOb_fCFu-bC5y-9McxaW-4r4LV8G3RfimMaa772W-86nwQnG46AkJzb9LOP5SAw-6nqvxeEmVSsZSB_EVpUbEEgd69O=w640-h640-s-no-gm?authuser=0');
-            background-size: cover;
-            transition: transform 0.5s;
-        }
-        #character.clicked {
-            transform: rotate(360deg);
-        }
-        #timer, #coins, #profile {
-            font-size: 24px;
-            margin: 20px;
-        }
-        #changeSkin, #changeName, #uploadAvatar {
-            margin: 10px;
-            padding: 10px;
-            cursor: pointer;
-            background-color: #555;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-        }
-        #nameInput {
-            margin: 10px;
-            padding: 5px;
-            font-size: 16px;
-        }
-        #socialLinks {
-            margin-top: 20px;
-        }
-    </style>
+    <title>Hamster Clicker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div id="profile">Имя: <span id="playerName">Игрок</span> <button id="changeName">Сменить имя</button></div>
-    <div id="timer"></div>
-    <div id="coins">Монеты: 0</div>
-    <div id="character"></div>
-    <button id="changeSkin">Сменить скин</button>
-    <input type="file" id="avatarInput" accept="image/*" style="display:none;"/>
-
-    <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
-
-    <div id="socialLinks">
-        <a href="https://github.com/achcoding123" target="_blank" style="color: #fff;">GitHub</a>
-        <a href="https://vk.com/achtipo" target="_blank" style="color: #fff; margin-left: 10px;">VK</a>
+    <div class="container">
+        <div class="header">
+            <div class="profile">
+                <img src="https://yt3.googleusercontent.com/a/default-user=s100-c-k-c0x00ffffff-no-rj" alt="Avatar" class="avatar">
+                <div class="user-info">
+                    <h2>AchClicker</h2>
+                </div>
+            </div>
+            <div class="income">
+            </div>
+        </div>
+        <div class="game-area">
+            <div class="score-board">
+                <img src="https://img.freepik.com/free-vector/dollar_53876-25498.jpg?t=st=1720354116~exp=1720357716~hmac=883a12623560c5e7fbb76ecf76fccc87180cde234d65c23116c63f1dd244552e&w=826" alt="Coin" class="coin-icon">
+                <span id="score">0</span>
+            </div>
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczMGJdjh4kTEAC67AaNSLOGmKIkpzsi5QuQjdKeWj1f5M9CTxWErmFn6OtwHBpOb_fCFu-bC5y-9McxaW-4r4LV8G3RfimMaa772W-86nwQnG46AkJzb9LOP5SAw-6nqvxeEmVSsZSB_EVpUbEEgd69O=w640-h640-s-no-gm?authuser=0" id="hamster" alt="Hamster" class="hamster-img">
+        </div>
+        <div class="energy-boost">
+            <div class="energy">
+                Энергия: <span id="energy">3000/3000</span>
+            </div>
+            <div class="Буст">
+                <button class="boost-button">Boost</button>
+            </div>
     </div>
-
-    <script>
-        let coins = 0;
-        
-        
-
-        const character = document.getElementById('character');
-        const coinsDisplay = document.getElementById('coins');
-        const timerDisplay = document.getElementById('timer');
-        const playerNameDisplay = document.getElementById('playerName');
-        const nameInput = document.getElementById('nameInput');
-        const avatarInput = document.getElementById('avatarInput');
-        const skins = ['https://lh3.googleusercontent.com/pw/AP1GczMGJdjh4kTEAC67AaNSLOGmKIkpzsi5QuQjdKeWj1f5M9CTxWErmFn6OtwHBpOb_fCFu-bC5y-9McxaW-4r4LV8G3RfimMaa772W-86nwQnG46AkJzb9LOP5SAw-6nqvxeEmVSsZSB_EVpUbEEgd69O=w640-h640-s-no-gm?authuser=0', 
-                       'https://lh3.googleusercontent.com/pw/AP1GczN8tf3lkFJb3RWwLBMI3Okt0L33xaQduTlWBCtKW7Lhh6Eey62gzJM-s03sp9bMNjwh9x9OpXykdEL58uq3OgueqoE0jGhBGbdCvZ3XP_EBAehph8yD59fLHIVqbpk6x8R3Hu3O0nJLS0YalXx8SpaZ=w205-h205-s-no?authuser=0',]
-                      
-        let currentSkinIndex = 0;
-
-        character.addEventListener('click', () => {
-            coins += 1; // Увеличиваем количество монет на 1 за клик
-            coinsDisplay.textContent = `Монеты: ${coins}`;
-            character.classList.add('clicked');
-            setTimeout(() => character.classList.remove('clicked'), 500);
-        });
-        character.addEventListener('bonus', () => {
-            coins += 1337;
-            coinsDisplay.textContent = `Монеты: ${coins}`;  
-            character.classList.add('clicked');  
-            setTimeout(() => character.classList.remove('clicked'), 500);
-        });  
-        
-        document.getElementById('changeSkin').addEventListener('click', () => {
-            currentSkinIndex = (currentSkinIndex + 1) % skins.length;
-            character.style.backgroundImage = `url('${skins[currentSkinIndex]}')`;
-        });
-
-        document.getElementById('changeName').addEventListener('click', () => {
-            nameInput.style.display = 'block';
-            nameInput.focus();
-        });
-
-        nameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                playerNameDisplay.textContent = nameInput.value || 'Игрок';
-                nameInput.value = '';
-                nameInput.style.display = 'none';
-            }
-        });
-
-        avatarInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                img.onload = function() {
-                    if (img.width <= 780 && img.height <= 780) {
-                        character.style.backgroundImage = `url('${img.src}')`;
-                    } else {
-                        alert('Пожалуйста, загрузите изображение не более 780x780 пикселей.');
-			    coins += 1337;}
-                };
-            }
-        });
-
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = ``;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    const earnedCoins = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
-                    coins += earnedCoins; // На случай завершения игры зарабатываем монеты
-                    coinsDisplay.textContent = `Монеты: ${coins}`;
-                    alert(`Время истекло! Вы получили ${earnedCoins} монет!`);
-                    resetTimer();
-                }
-            }, 1000);
-        }
-
-        function resetTimer() {
-            timeLeft = 120; // Сброс времени на 2 минуты
-            timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
-            startTimer();
-        }
-
-        startTimer();
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
